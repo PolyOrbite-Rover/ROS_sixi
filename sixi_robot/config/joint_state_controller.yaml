@@ -1,0 +1,29 @@
+# The joint state controller handles publishing transforms for any moving joints
+joint_state_controller:
+  type: "joint_state_controller/JointStateController"
+  publish_rate: 50
+
+# Position controllers
+position_bicep:
+  type: "position_controllers/JointPositionController"
+  joint: bicep_joint
+
+position_forearm:
+  type: "position_controllers/JointPositionController"
+  joint: forearm_joint
+
+position_hand:
+  type: "position_controllers/JointPositionController"
+  joint: hand_joint
+
+position_picassobox:
+  type: "position_controllers/JointPositionController"
+  joint: picassobox_joint
+
+position_shoulder:
+  type: "position_controllers/JointPositionController"
+  joint: shoulder_joint
+
+position_tuningfork:
+  type: "position_controllers/JointPositionController"
+  joint: tuningfork_joint

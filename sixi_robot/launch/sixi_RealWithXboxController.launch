@@ -1,0 +1,31 @@
+<launch>
+  <!-- Launch file for REAL Sixi 2 robot with Xbox controller -->
+
+  <!-- VIZUALIZATION NODE ______________________________________________________
+  Purpose: Launch RVIZ -->
+  <!-- TODO -->
+
+  <!-- JOY NODE (external library) ______________________________________________
+  Purpose: Read joystick movement -->
+  <node respawn="true" pkg="joy" type="joy_node" name="sixi_joy" >
+    <param name="dev" type="string" value="/dev/input/js0" />
+    <param name="deadzone" value="0.12" />
+  </node>
+
+  <!-- XBOX CONTROLLER NODE _____________________________________________________
+  Purpose: Map the movement of the joystick to the desired cartesian movement (XYZ) of the robot -->
+  <node pkg="sixi_robot" type="sixi_teleop_joy" name="teleop"/>
+  <node pkg="sixi_robot" type="inverse_kinematic.py" name="IK"/>
+
+  <!-- HARDWARE INTERFACE NODE _________________________________________________
+  Purpose: Communicate with Arduino microcontroller -->
+  <node pkg="sixi_robot" type="hardware_interface.py" name="hardware_interface"/>
+  <node pkg="rosserial_python" type="serial_node.py" name="rosserial" >
+    <param name="dev" type="string" value="/dev/ttyUSB0" />
+  </node>
+
+  <!-- JOINT POSITION SERVER NODE ______________________________________________
+  Pupose: Server to get the actual position of the robot -->
+  <node pkg="joint_states_listener" type="joint_pos_server.py" name="joint_pos_server"/>
+
+</launch>

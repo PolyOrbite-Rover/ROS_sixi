@@ -1,0 +1,9 @@
+<launch>
+
+  <node pkg="sixi_robot" type="hardware_interface.py" name="hardware_interface"/>
+
+  <node pkg="rosserial_python" type="serial_node.py" name="rosserial" >
+    <param name="dev" type="string" value="/dev/ttyUSB0" />
+  </node>
+
+</launch>

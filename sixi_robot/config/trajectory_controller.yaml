@@ -1,0 +1,32 @@
+# The joint state controller handles publishing transforms for any moving joints
+joint_state_controller:
+  type: "joint_state_controller/JointStateController"
+  publish_rate: 50
+
+# gripper_controller: TODO put hand joint, picassobox and gripper joint here
+
+# Trajectory controller
+arm_controller:
+  type: "position_controllers/JointTrajectoryController"
+  joints:
+    - j0_shoulder
+    - j1_bicep
+    - j2_forearm
+    - j3_tuningfork
+    - j4_picassobox
+    - j5_hand
+
+  constraints:
+    goal_time: 0.6
+    stopped_velocity_tolerance: 0.05
+    j0_shoulder  : {trajectory: 0.1, goal: 0.1}
+    j1_bicep     : {trajectory: 0.1, goal: 0.1}
+    j2_forearm   : {trajectory: 0.1, goal: 0.1}
+    j3_tuningfork: {trajectory: 0.1, goal: 0.1}
+    j4_picassobox: {trajectory: 0.1, goal: 0.1}
+    j5_hand      : {trajectory: 0.1, goal: 0.1}
+
+  stop_trajectory_duration: 0.5
+  state_publish_rate: 25
+  action_monitor_rate: 10
+  allow_partial_joints_goal: True

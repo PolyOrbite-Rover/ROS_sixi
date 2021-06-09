@@ -1,0 +1,24 @@
+<launch>
+
+  <arg name="model" default="$(find sixi_robot)/urdf/sixi_robot.urdf"/>
+  <arg name="rvizconfig" default="$(find sixi_robot)/rviz/urdf2.rviz" />
+
+  <include file="$(find sixi_robot)/launch/gazebo.launch">
+    <arg name="model" value="$(arg model)" />
+  </include>
+
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" />
+
+  <!-- Load joint controller config from YAML file -->
+  <rosparam file="$(find sixi_robot)/config/joint_state_controller.yaml" command="load" />
+  <!-- Load the controllers -->
+  <node name="sixi_controller_spawner" pkg="controller_manager" type="spawner"
+    respawn="false" output="screen"
+    args="joint_state_controller
+          position_bicep
+          position_forearm
+          position_hand
+          position_picassobox
+          position_shoulder
+          position_tuningfork"/>
+</launch>

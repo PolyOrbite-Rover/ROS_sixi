@@ -1,0 +1,20 @@
+<launch>
+
+  <!-- Get the robot description from the urdf file -->
+  <param name="robot_description" textfile="$(find sixi_robot)/urdf/sixi_robot.urdf"/>
+
+  <!-- Start the joint_state_publisher node to publish joint positions in the topic 'joint_states'
+       with or without gui (ESSENTIAL if the model has continuous links, i.e. not fixed)-->
+  <arg name="gui" default="true"/>
+  <node if="$(arg gui)" name="joint_state_publisher" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui" />
+  <node unless="$(arg gui)" name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+
+  <!-- Start the robot_state_publisher node that uses the parameter 'robot_description' and the joint
+       positions from the topic 'joint_states' to calculate forward kinematics and publish it via tf -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+
+  <!-- Start rviz with its configuration -->
+  <arg name="rvizconfig" default="$(find sixi_robot)/rviz/urdf.rviz" />
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
+
+</launch>

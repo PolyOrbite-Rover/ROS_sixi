@@ -1,0 +1,45 @@
+<launch>
+  <!-- Launch file for SIMULATION IN GAZEBO of Sixi 2 robot with Xbox controller -->
+
+  <!-- VIZUALIZATION NODES _____________________________________________________
+  Purpose: Launch Gazebo and RVIZ -->
+  <arg name="model" default="$(find sixi_robot)/urdf/sixi_robot.urdf"/>
+  <arg name="rvizconfig" default="$(find sixi_robot)/rviz/urdf.rviz" />
+
+  <include file="$(find sixi_robot)/launch/gazebo.launch">
+    <arg name="model" value="$(arg model)" />
+  </include>
+
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" />
+
+  <!-- CONTROLLER NODE _________________________________________________________
+  Purpose: Load the joint controller -->
+  <rosparam file="$(find sixi_robot)/config/trajectory_controller.yaml" command="load" />
+  <!-- Load the controllers -->
+  <node name="sixi_controller_spawner" pkg="controller_manager" type="spawner"
+    respawn="false" output="screen"
+    args="joint_state_controller
+          arm_controller"/>
+
+  <!-- JOINT POSITION SERVER NODE ______________________________________________
+  Pupose: Server to get the actual position of the robot -->
+  <node pkg="joint_states_listener" type="joint_pos_server.py" name="joint_pos_server"/>
+
+  <!-- JOY NODE (external library) ______________________________________________
+  Purpose: Read joystick movement -->
+  <node respawn="true" pkg="joy" type="joy_node" name="sixi_joy" >
+    <param name="dev" type="string" value="/dev/input/js0" />
+    <param name="deadzone" value="0.12" />
+  </node>
+
+  <!-- XBOX CONTROLLER NODE _____________________________________________________
+  Purpose: Map the movement of the joystick to the desired cartesian movement (XYZ) of the robot -->
+  <node pkg="sixi_robot" type="sixi_teleop_joy" name="teleop"/>
+  <node pkg="sixi_robot" type="inverse_kinematic.py" name="IK"/>
+
+  <!-- MOVEMENT CONTROLLER NODE ________________________________________________
+  Purpose: Send command to the controller to move the robot -->
+  <node pkg="sixi_robot" type="trajectory_controller" name="trajectory_controller" required="true"/>
+
+
+</launch>
