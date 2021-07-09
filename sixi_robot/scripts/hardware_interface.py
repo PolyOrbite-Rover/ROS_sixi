@@ -18,14 +18,14 @@ class HardwareInterface:
   def IK_callback(self, cmd_msg):
     print("msg received!")
     arduino_cmd = Float32MultiArray()
-    arduino_cmd.data = cmd_msg.joint_pos
+    arduino_cmd.data = np.rad2deg(cmd_msg.joint_pos)
     self.pub_to_arduino.publish(arduino_cmd)
 
   def arduino_callback(self, sensors_msg):
     print("msg received!")
     joint_state_msg = JointState()
     joint_state_msg.name = ["j0_shoulder", "j1_bicep", "j2_forearm", "j3_tuningfork", "j4_picassobox", "j5_hand"]
-    joint_state_msg.position = sensors_msg.data
+    joint_state_msg.position = np.deg2rad(sensors_msg.data)
     self.pub_to_joint_state.publish(joint_state_msg)
 
 
