@@ -11,6 +11,7 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   urdf
   actionlib
+  message_generation
 )
 
 ## System dependencies are found with CMake's conventions
@@ -65,7 +66,7 @@ generate_messages(
 catkin_package(
   INCLUDE_DIRS include
   LIBRARIES ${PROJECT_NAME}
-  CATKIN_DEPENDS rospy roscpp std_msgs urdf actionlib
+  CATKIN_DEPENDS rospy roscpp std_msgs urdf actionlib message_runtime
   # DEPENDS system_lib
 )
 
@@ -79,6 +80,22 @@ include_directories(
 add_library(${PROJECT_NAME}
   src/sixi_teleop_joy.cpp
 )
+
+## Declare a C++ executable
+## With catkin_make all packages are built within a single CMake context
+## The recommended prefix ensures that target names across packages don't collide
+add_executable(trajectory_controller src/trajectory_controller.cpp)
+add_executable(sixi_teleop_joy src/sixi_teleop_joy.cpp)
+
+## Add cmake target dependencies of the executable
+## same as for the library above
+add_dependencies(sixi_robot sixi_robot_generate_messages_cpp)
+add_dependencies(trajectory_controller sixi_robot_generate_messages_cpp)
+add_dependencies(sixi_teleop_joy sixi_robot_generate_messages_cpp)
+
+# Specify libraries to link a library or executable target against
+target_link_libraries(trajectory_controller ${catkin_LIBRARIES})
+target_link_libraries(sixi_teleop_joy ${catkin_LIBRARIES})
 
 #############
 ## Install ##
@@ -109,7 +126,4 @@ catkin_install_python(PROGRAMS
 ## Testing ##
 #############
 
-add_executable(trajectory_controller src/trajectory_controller.cpp)
-target_link_libraries(trajectory_controller ${catkin_LIBRARIES})
-add_executable(sixi_teleop_joy src/sixi_teleop_joy.cpp)
-target_link_libraries(sixi_teleop_joy ${catkin_LIBRARIES})
+
