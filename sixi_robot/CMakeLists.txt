@@ -32,6 +32,7 @@ add_message_files(
   FILES
   CmdControl.msg
   CmdPosJoints.msg
+  CmdWeb.msg
 )
 
 ## Generate services in the 'srv' folder

@@ -26,23 +26,22 @@ int TeleopSixi::getPublishRate() const
 }
 
 
-void TeleopSixi::callback(const sensor_msgs::Joy::ConstPtr& joy)
+void TeleopSixi::callback(const sixi_robot::CmdWeb& joy)
 {
-  std::vector<float> null_vec_axes = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
-  std::vector<int> null_vec_buttons = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-  if (joy->axes == null_vec_axes & joy->buttons == null_vec_buttons){
+  std::vector<float> null_vec = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+  if (joy.zero == 0.0 && joy.one == 0.0 && joy.two == 0.0 && joy.three == 0.0 && joy.four == 0.0 && joy.five == 0.0){
     joy_at_rest_ = true;
     ROS_ERROR("joy at rest!!!!");
     current_joy_pos_ = {};
   }
   else{
     joy_at_rest_ = false;
-    current_joy_pos_[0] = joy->axes[control_axes_[0]];
-    current_joy_pos_[1] = joy->axes[control_axes_[1]];
-    current_joy_pos_[2] = joy->axes[control_axes_[2]];
-    current_joy_pos_[3] = joy->buttons[5] - joy->buttons[4];
-    current_joy_pos_[4] = joy->axes[control_axes_[4]];
-    current_joy_pos_[5] = joy->axes[control_axes_[5]];
+    current_joy_pos_[0] = joy.zero;
+    current_joy_pos_[1] = joy.one;
+    current_joy_pos_[2] = joy.two;
+    current_joy_pos_[3] = joy.three;
+    current_joy_pos_[4] = joy.four;
+    current_joy_pos_[5] = joy.five;
     // ROS_ERROR("(%f, %f, %f)",current_joy_pos_[0] ,current_joy_pos_[1] ,current_joy_pos_[2] );
     ROS_WARN("Not working...");
   }

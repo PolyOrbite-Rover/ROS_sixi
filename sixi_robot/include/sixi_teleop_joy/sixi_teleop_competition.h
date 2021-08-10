@@ -5,7 +5,7 @@
 
 #include <ros/ros.h>
 #include <geometry_msgs/Twist.h>
-#include <sensor_msgs/Joy.h>
+#include <sixi_robot/CmdWeb.h>
 #include "sixi_robot/CmdControl.h"
 #include "joint_states_listener/ReturnJointPos.h"
 
@@ -20,7 +20,7 @@ public:
 
 private:
   // Private methods
-  void callback(const sensor_msgs::Joy::ConstPtr& joy);
+  void callback(const sixi_robot::CmdWeb& joy);
   // Private attributes
   static const std::vector<int> control_axes_;
   // static const std::vector<int> control_buttons_;
