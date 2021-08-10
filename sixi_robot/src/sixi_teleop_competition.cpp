@@ -1,7 +1,6 @@
 #include "sixi_teleop_joy/sixi_teleop_competition.h"
 
 // DEFINITION OF CONSTANTS (adjust if needed)
-const std::vector<int> TeleopSixi::control_axes_  = {0, 1, 4, -1, 7, 6};
 const int TeleopSixi::publish_rate_hz_            = 10;
 const int TeleopSixi::n_joints_                   = 6;
 
@@ -9,7 +8,7 @@ const int TeleopSixi::n_joints_                   = 6;
 TeleopSixi::TeleopSixi(bool verbose): verbose_(verbose)
 {
   control_pub_ = nh_.advertise<sixi_robot::CmdControl>("sixi_robot/cmd_control", 1);
-  joy_sub_ = nh_.subscribe<sensor_msgs::Joy>("teleop_sixi", 10, &TeleopSixi::callback, this);
+  joy_sub_ = nh_.subscribe<sixi_robot::CmdWeb>("teleop_sixi", 10, &TeleopSixi::callback);
   current_joy_pos_.resize(n_joints_);
 }
 
