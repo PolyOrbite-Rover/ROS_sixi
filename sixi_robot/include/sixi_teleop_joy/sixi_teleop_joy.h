@@ -20,7 +20,7 @@ public:
 
 private:
   // Private methods
-  void joyCallback(const sensor_msgs::Joy::ConstPtr& joy);
+  void joyCallback(sensor_msgs::Joy::ConstPtr joy);
   // Private attributes
   static const std::vector<int> control_axes_;
   // static const std::vector<int> control_buttons_;

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 
 import rospy
 from sixi_robot.msg import CmdPosJoints, CmdControl
@@ -35,7 +35,7 @@ class InverseKinematic:
     try:
       srv = self.pos_client()
     except rospy.ServiceException as e:
-      rospy.logerr(f"Joint position service call failed with error: {e}")
+      rospy.logerr("Joint position service call failed with error: %s" % e)
     else:
       current_Theta = np.array(srv.position)
 
@@ -45,14 +45,14 @@ class InverseKinematic:
         next_X = current_X + movement
         next_Theta = self.IK(next_X)
         with np.printoptions(precision=2, suppress=True):
-          print(f"current_Theta = {current_Theta}")
-          print(f"{current_X} + {movement} = {next_X}")
-          print(f"next_Theta = {next_Theta}")
+          print("current_Theta = %f" % current_Theta)
+          print("%f + %f = %f" % (current_X, movement, next_X))
+          print("next_Theta = %f" % next_Theta)
       else: # Joints mode
         movement = self.mvt_scale_and_direction_JOINTS * np.array(control_msg.pos)
         next_Theta = current_Theta + movement
         with np.printoptions(precision=2, suppress=True):
-          print(f"{current_Theta} + {movement} = {next_Theta}")
+          print("%f + %f = %f" % (current_Theta, movement, next_Theta))
 
       joints_msg = CmdPosJoints()
       joints_msg.joint_pos = next_Theta
@@ -78,7 +78,7 @@ class InverseKinematic:
                          [0        , np.sin(self.D_H_table[i,1])          , np.cos(self.D_H_table[i,1])           , self.D_H_table[i,2]],
                          [0        , 0                               , 0                                , 1]]))
 
-    T = A[0] @ A[1] @ A[2] @ A[3] @ A[4] @ A[5]
+    T = np.matmul(np.matmul(np.matmul(np.matmul(np.matmul(A[0], A[1]), A[2]), A[3]), A[4]), A[5])
 
     x = T[0, 3]
     y = T[1, 3]
@@ -96,7 +96,7 @@ class InverseKinematic:
     X = np.array([x, y, z, alpha, beta, gamma])
     if verbose:
       with np.printoptions(precision=2, suppress=True):
-        print(f"[x, y, z, alpha, beta, gamma] = \n{X}")
+        print("[x, y, z, alpha, beta, gamma] = \n%s" % X)
     return X
 
   def IK(self, X, verbose=False):
@@ -143,9 +143,9 @@ class InverseKinematic:
                          [np.sin(t), np.cos(t)*np.cos(self.D_H_table[i,1]), -np.cos(t)*np.sin(self.D_H_table[i,1])],
                          [0        , np.sin(self.D_H_table[i,1])          , np.cos(self.D_H_table[i,1])           ]]))
 
-    R_0_3 = R[0] @ R[1] @ R[2]
+    R_0_3 = np.matmul(np.matmul(R[0], R[1]), R[2])
     R_0_3_inv = np.linalg.inv(R_0_3)
-    R_3_6 = R_0_3_inv @ R_0_6
+    R_3_6 = np.matmul(R_0_3_inv, R_0_6)
 
     t5 = np.arccos(R_3_6[2, 2])
     if np.abs(np.abs(R_3_6[2, 2]) - 1) < self.ZERO_MARGIN:
@@ -164,7 +164,7 @@ class InverseKinematic:
 
     if verbose:
       with np.printoptions(precision=2, suppress=True):
-        print(f"Theta = \n{Theta}")
+        print("Theta = \n%s" % Theta)
 
     return Theta
 

@@ -8,7 +8,7 @@ const int TeleopSixi::n_joints_                   = 6;
 TeleopSixi::TeleopSixi(bool verbose): verbose_(verbose)
 {
   control_pub_ = nh_.advertise<sixi_robot::CmdControl>("sixi_robot/cmd_control", 1);
-  joy_sub_ = nh_.subscribe<sixi_robot::CmdWeb>("sixi_robot/sixi_commands", 10, &TeleopSixi::callback, this);
+  joy_sub_ = nh_.subscribe("sixi_robot/sixi_commands", 10, &TeleopSixi::callback, this);
   current_joy_pos_.resize(n_joints_);
 }
 
@@ -25,7 +25,7 @@ int TeleopSixi::getPublishRate() const
 }
 
 
-void TeleopSixi::callback(const sixi_robot::CmdWeb& joy)
+void TeleopSixi::callback(sixi_robot::CmdWeb joy)
 {
   std::vector<float> null_vec = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
   if (joy.zero == 0.0 && joy.one == 0.0 && joy.two == 0.0 && joy.three == 0.0 && joy.four == 0.0 && joy.five == 0.0){

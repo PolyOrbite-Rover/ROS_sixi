@@ -9,7 +9,7 @@ const int TeleopSixi::n_joints_                   = 6;
 TeleopSixi::TeleopSixi(bool verbose): verbose_(verbose)
 {
   control_pub_ = nh_.advertise<sixi_robot::CmdControl>("sixi_robot/cmd_control", 1);
-  joy_sub_ = nh_.subscribe<sensor_msgs::Joy>("joy", 10, &TeleopSixi::joyCallback, this);
+  joy_sub_ = nh_.subscribe("joy", 10, &TeleopSixi::joyCallback, this);
   current_joy_pos_.resize(n_joints_);
 }
 
@@ -26,7 +26,7 @@ int TeleopSixi::getPublishRate() const
 }
 
 
-void TeleopSixi::joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
+void TeleopSixi::joyCallback(sensor_msgs::Joy::ConstPtr joy)
 {
   std::vector<float> null_vec_axes = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
   std::vector<int> null_vec_buttons = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};

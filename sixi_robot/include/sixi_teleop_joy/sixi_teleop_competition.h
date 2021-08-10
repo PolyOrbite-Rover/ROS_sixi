@@ -20,7 +20,7 @@ public:
 
 private:
   // Private methods
-  void callback(const sixi_robot::CmdWeb& joy);
+  void callback(sixi_robot::CmdWeb joy);
   // Private attributes
   static const std::vector<int> control_axes_;
   // static const std::vector<int> control_buttons_;
