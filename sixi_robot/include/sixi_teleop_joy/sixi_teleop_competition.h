@@ -1,5 +1,5 @@
-#ifndef SIXI_TELEOP_JOY_H
-#define SIXI_TELEOP_JOY_H
+#ifndef SIXI_TELEOP_COMPETITION_H
+#define SIXI_TELEOP_COMPETITION_H
 
 #define MODE_JOINTS 0
 
@@ -20,7 +20,7 @@ public:
 
 private:
   // Private methods
-  void joyCallback(const sensor_msgs::Joy::ConstPtr& joy);
+  void callback(const sensor_msgs::Joy::ConstPtr& joy);
   // Private attributes
   static const std::vector<int> control_axes_;
   // static const std::vector<int> control_buttons_;
