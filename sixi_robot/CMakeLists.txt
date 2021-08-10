@@ -80,6 +80,7 @@ include_directories(
 ## Declare a C++ library
 add_library(${PROJECT_NAME}
   src/sixi_teleop_joy.cpp
+  src/sixi_teleop_competition.cpp
 )
 
 ## Declare a C++ executable
@@ -87,16 +88,19 @@ add_library(${PROJECT_NAME}
 ## The recommended prefix ensures that target names across packages don't collide
 add_executable(trajectory_controller src/trajectory_controller.cpp)
 add_executable(sixi_teleop_joy src/sixi_teleop_joy.cpp)
+add_executable(sixi_teleop_competition src/sixi_teleop_competition.cpp)
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
 add_dependencies(sixi_robot sixi_robot_generate_messages_cpp)
 add_dependencies(trajectory_controller sixi_robot_generate_messages_cpp)
 add_dependencies(sixi_teleop_joy sixi_robot_generate_messages_cpp)
+add_dependencies(sixi_teleop_competition sixi_robot_generate_messages_cpp)
 
 # Specify libraries to link a library or executable target against
 target_link_libraries(trajectory_controller ${catkin_LIBRARIES})
 target_link_libraries(sixi_teleop_joy ${catkin_LIBRARIES})
+target_link_libraries(sixi_teleop_competition ${catkin_LIBRARIES})
 
 #############
 ## Install ##

@@ -8,7 +8,7 @@ const int TeleopSixi::n_joints_                   = 6;
 TeleopSixi::TeleopSixi(bool verbose): verbose_(verbose)
 {
   control_pub_ = nh_.advertise<sixi_robot::CmdControl>("sixi_robot/cmd_control", 1);
-  joy_sub_ = nh_.subscribe<sixi_robot::CmdWeb>("teleop_sixi", 10, &TeleopSixi::callback);
+  joy_sub_ = nh_.subscribe<sixi_robot::CmdWeb>("sixi_robot/sixi_commands", 10, &TeleopSixi::callback, this);
   current_joy_pos_.resize(n_joints_);
 }
 
